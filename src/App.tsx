@@ -39,6 +39,18 @@ function App() {
     setTasks(tasks.filter((task) => task.id !== id));
   }
 
+  function changeTaskStatus(id: string, status: boolean) {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        task.finished = status;
+      }
+
+      return task;
+    });
+
+    setTasks(updatedTasks);
+  }
+
   return (
     <main>
       <Header />
@@ -66,6 +78,7 @@ function App() {
                   key={task.id}
                   taskData={task}
                   removeTask={handleTaskDeletion}
+                  setTaskStatus={changeTaskStatus}
                 />
               ))}
             </div>

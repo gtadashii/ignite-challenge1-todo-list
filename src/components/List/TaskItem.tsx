@@ -5,11 +5,20 @@ import styles from "./TaskItem.module.css";
 export interface TaskItemProps {
   taskData: Task;
   removeTask: (id: string) => void;
+  setTaskStatus: (id: string, status: boolean) => void;
 }
 
-export function TaskItem({ taskData, removeTask }: TaskItemProps) {
+export function TaskItem({
+  taskData,
+  removeTask,
+  setTaskStatus,
+}: TaskItemProps) {
   function handleRemoveTask() {
     removeTask(taskData.id);
+  }
+
+  function handleTaskStatusChange() {
+    setTaskStatus(taskData.id, !taskData.finished);
   }
 
   const checkboxCheckedClassname = taskData.finished
@@ -22,7 +31,7 @@ export function TaskItem({ taskData, removeTask }: TaskItemProps) {
   return (
     <div className={styles.item}>
       <div>
-        <label htmlFor="checkbox">
+        <label htmlFor="checkbox" onClick={handleTaskStatusChange}>
           <input readOnly type="checkbox" checked={taskData.finished} />
           <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
             {taskData.finished && <Check size={12} />}
