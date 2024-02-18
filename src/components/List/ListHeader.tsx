@@ -1,16 +1,28 @@
 import styles from "./ListHeader.module.css";
 
-export function ListHeader() {
+export interface ListHeaderProps {
+  taskCounter: number;
+  finishedTasksCounter: number;
+}
+
+export function ListHeader({
+  taskCounter,
+  finishedTasksCounter,
+}: ListHeaderProps) {
   return (
     <header className={styles.container}>
       <aside>
         <p>Tasks criadas</p>
-        <span>{0}</span>
+        <span>{taskCounter}</span>
       </aside>
 
       <aside>
         <p>Concluídas</p>
-        <span>{0}</span>
+        <span>
+          {taskCounter === 0
+            ? taskCounter
+            : `${finishedTasksCounter} de ${taskCounter}`}
+        </span>
       </aside>
     </header>
   );

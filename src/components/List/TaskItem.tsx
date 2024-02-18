@@ -2,11 +2,20 @@ import { Check, Trash } from "@phosphor-icons/react";
 import { Task } from "../../App";
 import styles from "./TaskItem.module.css";
 
-export function TaskItem(data: Task) {
-  const checkboxCheckedClassname = data.finished
+export interface TaskItemProps {
+  taskData: Task;
+  removeTask: (id: string) => void;
+}
+
+export function TaskItem({ taskData, removeTask }: TaskItemProps) {
+  function handleRemoveTask() {
+    removeTask(taskData.id);
+  }
+
+  const checkboxCheckedClassname = taskData.finished
     ? styles["checkbox-checked"]
     : styles["checkbox-unchecked"];
-  const paragraphCheckedClassname = data.finished
+  const paragraphCheckedClassname = taskData.finished
     ? styles["paragraph-checked"]
     : "";
 
@@ -14,18 +23,18 @@ export function TaskItem(data: Task) {
     <div className={styles.item}>
       <div>
         <label htmlFor="checkbox">
-          <input readOnly type="checkbox" checked={data.finished} />
+          <input readOnly type="checkbox" checked={taskData.finished} />
           <span className={`${styles.checkbox} ${checkboxCheckedClassname}`}>
-            {data.finished && <Check size={12} />}
+            {taskData.finished && <Check size={12} />}
           </span>
 
           <p className={`${styles.paragraph} ${paragraphCheckedClassname}`}>
-            {data.description}
+            {taskData.description}
           </p>
         </label>
       </div>
 
-      <button>
+      <button onClick={handleRemoveTask}>
         <Trash size={16} color="#808080" />
       </button>
     </div>

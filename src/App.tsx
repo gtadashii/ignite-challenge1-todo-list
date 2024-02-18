@@ -7,6 +7,8 @@ import { PlusCircle } from "@phosphor-icons/react";
 import { ListHeader } from "./components/List/ListHeader";
 import { TaskItem } from "./components/List/TaskItem";
 import { Empty } from "./components/List/Empty";
+import { useState } from "react";
+import { v4 as uuid } from "uuid";
 
 export interface Task {
   id: string;
@@ -14,44 +16,56 @@ export interface Task {
   finished: boolean;
 }
 
-const tasks: Task[] = [
-  {
-    id: "1",
-    description:
-      "Preciso ir ao mercado comprar todos os itens para fazer panquecas para o café da manhã",
-    finished: false,
-  },
-  {
-    id: "2",
-    description:
-      "Preciso ir ao mercado comprar todos os itens para fazer panquecas para o café da manhã",
-    finished: true,
-  },
-];
-
 function App() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [inputValue, setInputValue] = useState("");
+
+  function handleTaskCreation() {
+    if (!inputValue) return;
+
+    const newTask: Task = {
+      id: uuid(),
+      description: inputValue,
+      finished: false,
+    };
+
+    setTasks([...tasks, newTask]);
+
+    setInputValue("");
+  }
+
+  function handleTaskDeletion(id: string) {
+    console.log("Deletando tarefa", id);
+    setTasks(tasks.filter((task) => task.id !== id));
+  }
+
   return (
     <main>
       <Header />
       <div className={styles.mainArea}>
         <div className={styles.newTaskInfo}>
-          <AddTaskInput />
-          <AddTaskButton>
+          <AddTaskInput
+            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue}
+          />
+          <AddTaskButton onClick={handleTaskCreation}>
             Criar
             <PlusCircle size={16} color="#F2F2F2" weight="bold" />
           </AddTaskButton>
         </div>
         <div className={styles.taskList}>
-          <ListHeader />
+          <ListHeader
+            taskCounter={tasks.length}
+            finishedTasksCounter={tasks.filter((task) => task.finished).length}
+          />
 
           {tasks.length > 0 ? (
             <div className={styles.task}>
               {tasks.map((task) => (
                 <TaskItem
                   key={task.id}
-                  id={task.id}
-                  description={task.description}
-                  finished={task.finished}
+                  taskData={task}
+                  removeTask={handleTaskDeletion}
                 />
               ))}
             </div>
