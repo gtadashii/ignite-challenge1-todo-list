@@ -1,0 +1,16 @@
+.emptyCointainer {
+  padding: 4rem 1.5rem;
+  border-top: 1px solid var(--gray-400);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  gap: 1rem;
+  color: var(--gray-300);
+}
+
+.emptyCointainer p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
